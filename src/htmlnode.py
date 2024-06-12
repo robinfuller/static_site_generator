@@ -1,4 +1,5 @@
 import typing
+
 class HTMLNode:
     def __init__(self, tag = None, value = None, children = None, props = None):
         self.tag = tag
@@ -48,4 +49,39 @@ class LeafNode(HTMLNode):
             return f"{self.value}"
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
         
+class ParentNode(HTMLNode):
+    def __init__(self, tag = None, children = None, props = None):
+        super().__init__(tag, None, children, props)
 
+    def __repr__(self):
+        return super().__repr__() ##check if this works without the value property or if a new __repr__ is needed
+        
+    def to_html(self):
+        if self.children == [] or self.children is None:
+            raise ValueError("No Children Provided to Parentnode")
+        children_html = ""
+        for child in self.children:
+            children_html  += child.to_html()
+        return f"<{self.tag}>{children_html}</{self.tag}>"
+    
+
+node = ParentNode(
+    "c",
+    [
+        LeafNode("b", "Bold text"),
+        LeafNode(None, "Normal text"),
+        LeafNode("i", "italic text"),
+        LeafNode(None, "Normal text"),
+        ParentNode(
+    "p",
+    [
+        LeafNode("b", "Bold text"),
+        LeafNode(None, "Normal text"),
+        LeafNode("i", "italic text"),
+        LeafNode(None, "Normal text"),
+    ],
+)
+    ],
+)
+
+print(node.to_html())   
