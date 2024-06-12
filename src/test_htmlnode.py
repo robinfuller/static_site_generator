@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_node_eq(self):
@@ -18,9 +18,14 @@ class TestHTMLNode(unittest.TestCase):
         test1  = " href=\"https://www.supercombo.gg\" target=\"_blank\""
         self.assertEqual(node1.props_to_html(), test1)
 
+    def test_to_html_no_children(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
+
+    def test_to_html_no_tag(self):
+        node = LeafNode(None, "Hello, world!")
+        self.assertEqual(node.to_html(), "Hello, world!")
         
-
-    
-
+   
 if __name__ == "__main__":
     unittest.main()
