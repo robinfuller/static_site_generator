@@ -55,7 +55,10 @@ class ParentNode(HTMLNode):
 
     def __repr__(self):
         return super().__repr__() ##check if this works without the value property or if a new __repr__ is needed
-        
+
+    def __eq__(self, other):
+        return super().__eq__(self.tag, self.children, self.props)
+
     def to_html(self):
         if self.children == [] or self.children is None:
             raise ValueError("No Children Provided to Parentnode")
@@ -64,24 +67,3 @@ class ParentNode(HTMLNode):
             children_html  += child.to_html()
         return f"<{self.tag}>{children_html}</{self.tag}>"
     
-
-node = ParentNode(
-    "c",
-    [
-        LeafNode("b", "Bold text"),
-        LeafNode(None, "Normal text"),
-        LeafNode("i", "italic text"),
-        LeafNode(None, "Normal text"),
-        ParentNode(
-    "p",
-    [
-        LeafNode("b", "Bold text"),
-        LeafNode(None, "Normal text"),
-        LeafNode("i", "italic text"),
-        LeafNode(None, "Normal text"),
-    ],
-)
-    ],
-)
-
-print(node.to_html())   
