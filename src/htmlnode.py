@@ -66,4 +66,32 @@ class ParentNode(HTMLNode):
         for child in self.children:
             children_html  += child.to_html()
         return f"<{self.tag}>{children_html}</{self.tag}>"
-    
+
+
+
+def textnode_to_html_node(text_node):
+    text = getattr(text_node, "text")
+    text_type = getattr(text_node, "text_type")
+    url = getattr(text_node, "url")
+    accepted_nodes = {
+        "text_type_text": "text",
+        "text_type_bold": "bold",
+        "text_type_italic": "italic",
+        "text_type_code": "code",
+        "text_type_link": "link",
+        "text_type_image": "image"
+    }
+    if text_type not in accepted_nodes.values():
+        raise Exception(f"text_type {text_type} not supported")
+    if text_type == "text":
+        return LeafNode(None, text)
+    if text_type == "bold":
+        return LeafNode("b", text)
+    if text_type == "italic":
+        return LeafNode("i", text)
+    if text_type == "code":
+        return LeafNode("code", text)
+    if text_type == "link":
+        return LeafNode("a", text, {"href": f"{url}"})
+    if text_type == "img":
+        return LeafNode("img", "", {"src": f"{url}", "alt": f"\"{text}\"" })
